@@ -1,6 +1,6 @@
 package interaction_service.entity;
 
-import interaction_service.enumeration.CommentStatus;
+import interaction_service.enumeration.ShareType;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.index.CompoundIndexes;
@@ -8,30 +8,27 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
 
-@Document(collection = "comments")
+@Document(collection = "shares")
 @CompoundIndexes({
         @CompoundIndex(
-                name = "post_status_created_idx",
-                def = "{'postId': 1, 'status': 1, 'createdAt': 1}"
+                name = "post_created_idx",
+                def = "{'postId': 1, 'createdAt': -1}"
         ),
         @CompoundIndex(
-                name = "user_status_created_idx",
-                def = "{'userId': 1, 'status': 1, 'createdAt': -1}"
+                name = "user_created_idx",
+                def = "{'userId': 1, 'createdAt': -1}"
         )
 })
-public class Comment {
-
+public class Share {
     @Id
     private String id;
 
     private String postId;
     private String userId;
-    private String content;
-    private CommentStatus status;
+    private ShareType shareType;
     private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
 
-    public Comment() {
+    public Share() {
     }
 
     public String getId() {
@@ -58,20 +55,12 @@ public class Comment {
         this.userId = userId;
     }
 
-    public String getContent() {
-        return content;
+    public ShareType getShareType() {
+        return shareType;
     }
 
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public CommentStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(CommentStatus status) {
-        this.status = status;
+    public void setShareType(ShareType shareType) {
+        this.shareType = shareType;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -80,13 +69,5 @@ public class Comment {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
     }
 }
